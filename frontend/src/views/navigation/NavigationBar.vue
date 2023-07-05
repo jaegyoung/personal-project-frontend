@@ -8,7 +8,7 @@
     
   <v-spacer></v-spacer>
     
-   <v-toolbar-items>     <v-btn class="navbar-btn" v-if="!isAuthenticated" text @click="signUp">
+   <v-toolbar-items>    <v-btn >{{nickName }}</v-btn> <v-btn class="navbar-btn" v-if="!isAuthenticated" text @click="signUp">
         <span>회원가입</span>
         <v-icon right>mdi-account-plus-outline</v-icon>
       </v-btn>
@@ -34,7 +34,8 @@ export default {
     data() {
         return {
             drawer:false,
-            isAuthenticated:false
+            isAuthenticated:false,
+            nickName:'',
         }
     },
     methods: {
@@ -56,6 +57,9 @@ export default {
         router.push('/signup');
       }
     },
+    },
+    mounted() {
+      this.nickName=localStorage.getItem('nickname')
     },
 
 }
