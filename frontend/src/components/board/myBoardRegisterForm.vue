@@ -59,11 +59,13 @@ export default {
           kakao: null,
           coord: '',
           coordLat:'',
-          coordLng:''
+          coordLng:'',
+          nickName:''
             }
     },
     mounted() {
       this.loadMap();
+      this.nickName=localStorage.getItem('nickname');
     },
     methods: {
         onLoad(vue) {
@@ -74,15 +76,16 @@ export default {
           let aboutBoard = {
             boardTitle: this.boardTitle,
             boardInfo: this.boardInfo,
-        boardCoordLat: this.coordLat,
-        boardCoordLng: this.coordLng
+            coordLat: this.coordLat,
+            coordLng: this.coordLng,
+        writer: this.nickName
       }
       formData.append(
         "aboutBoard",
         new Blob([JSON.stringify(aboutBoard)], { type: "application/json" })
       )
 
-      this.$emit("submit", formData)
+      this.$emit("submit", aboutBoard)
       console.log(aboutBoard)
       await this.$router.push({ name: 'myWalkBoardList' })
 
@@ -113,8 +116,8 @@ export default {
     initializeMap() {
       const container = this.$refs.map;
       const options = {
-        center: new this.kakao.maps.LatLng(37.566826, 126.9786567),
-        level: 3,
+        center: new this.kakao.maps.LatLng(37.499012225823975, 127.03284079298378),
+        level: 4,
       };
       this.map = new this.kakao.maps.Map(container, options);
 
