@@ -1,7 +1,8 @@
 <template lang="html">
     <v-container class="boardList">
-        <h3 style="text-align: center;">나만의 산책로</h3><v-btn @click="goRegister">등록</v-btn>
-        <v-row>
+        <h3 style="text-align: center;">나만의 산책로</h3>
+        <v-btn @click="goRegister">등록</v-btn>
+        <v-row v-if="boards && boards.length > 0">
             <v-col v-for="(item, index) in boards" :key="index" cols="3">
                 <v-card class="card-item" @click="goRead" style="height: 250px; width: 250px;"> 
                     <v-img src="https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=47563&fileTy=MEDIA&fileNo=1" height="66%"/>
@@ -11,6 +12,9 @@
                 </v-card>
             </v-col>
         </v-row>
+        <div v-else>
+            데이터 로딩 중...
+        </div>
     </v-container>
 </template>
 <script>
@@ -29,16 +33,28 @@ export default {
     },
     methods: {
         ...mapActions(BoardModule, ['requestBoardListToSpring']),
-        goRead(){
-            router.push(`/board/read`
-            )
+        goRead(item){
+            router.push({
+                name: 'myWalkBoardRead',
+                params: {boardId:item.id }
+            })
         },
         goRegister(){
             router.push('/myBoardRegister')
+        },  
+        consoleBoard(){
+            console.log("보드 정보야 :"+this.boards)
         }
     },
-    created() {
-        this.requestBoardListToSpring();
+    async created() {
+        await this.requestBoardListToSpring()
+  .then((data) => {
+    this.consoleBoard()
+  })
+  .catch((error) => {
+    throw(error)
+  });
+
 
     },
     
