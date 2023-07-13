@@ -4,7 +4,7 @@
         <v-btn @click="goRegister">등록</v-btn>
         <v-row v-if="boards && boards.length > 0">
             <v-col v-for="(item, index) in boards" :key="index" cols="3">
-                <v-card class="card-item" @click="goRead" style="height: 250px; width: 250px;"> 
+                <v-card class="card-item" @click="goRead(item.id)" style="height: 250px; width: 250px;"> 
                     <v-img src="https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=47563&fileTy=MEDIA&fileNo=1" height="66%"/>
                     <v-card-text height="34%">
                         {{ item.boardTitle }}
@@ -33,12 +33,11 @@ export default {
     },
     methods: {
         ...mapActions(BoardModule, ['requestBoardListToSpring']),
-        goRead(item){
+        goRead(id) {
             router.push({
                 name: 'myWalkBoardRead',
-                params: {boardId:item.id }
-            })
-        },
+                params: { id }
+            });},
         goRegister(){
             router.push('/myBoardRegister')
         },  
