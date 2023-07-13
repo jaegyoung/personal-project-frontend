@@ -1,30 +1,47 @@
 <template lang="html">
-    <v-container>
-        <h3 style="text-align: center;">나만의 산책로</h3>
-         <v-row>
-           
-            <v-col v-for="(item, index) in board" :key="index" cols="3">
-                <v-card class="card-item" @click="goRead" style="height: 250px; width: 250px;"> <v-img src="@/assets/park.svg" height="66%"></v-img>
-                    <v-card-text height="34%">{{ item }}</v-card-text></v-card>
+    <v-container class="boardList">
+        <h3 style="text-align: center;">나만의 산책로</h3><v-btn @click="goRegister">등록</v-btn>
+        <v-row>
+            <v-col v-for="(item, index) in boards" :key="index" cols="3">
+                <v-card class="card-item" @click="goRead" style="height: 250px; width: 250px;"> 
+                    <v-img src="https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=47563&fileTy=MEDIA&fileNo=1" height="66%"/>
+                    <v-card-text height="34%">
+                        {{ item.boardTitle }}
+                    </v-card-text>
+                </v-card>
             </v-col>
         </v-row>
     </v-container>
 </template>
 <script>
 import router from '@/router';
+const BoardModule = 'BoardModule';
+import { mapActions, mapState } from 'vuex';
 
 export default {
+    computed:{
+        ...mapState(BoardModule,['boards'])
+    },
     data() {
         return {
-            board : [
-                1,2,3,4,5,6,7,8,9,10 ]
+            prevBoards: [] 
         }
     },
     methods: {
+        ...mapActions(BoardModule, ['requestBoardListToSpring']),
         goRead(){
-            router.push(`/read/:myBoardId`)
+            router.push(`/board/read`
+            )
+        },
+        goRegister(){
+            router.push('/myBoardRegister')
         }
     },
+    created() {
+        this.requestBoardListToSpring();
+
+    },
+    
     
 }
 </script>
@@ -35,5 +52,7 @@ export default {
     transform: scale(1.05);
     transition: box-shadow 0.3s, transform 0.3s;
 }
-</style>
+.boardList{
+    max-width: 1000px;
+}
 </style>
