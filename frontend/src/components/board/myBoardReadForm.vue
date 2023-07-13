@@ -35,6 +35,8 @@
 
 </template>
 <script>
+const ID=process.env.VUE_APP_KAKAO_ID
+
 export default {
   name:"myBoardReadForm",
   props:{
@@ -68,7 +70,7 @@ export default {
       if (!this.kakao) {
         const script = document.createElement('script');
         script.type = 'text/javascript';
-        script.src = '//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=185c27ae2c3a87993d3cf6235d2507ba';
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${ID}`;
         script.async = true;
         script.onload = () => {
           window.kakao.maps.load(() => {
