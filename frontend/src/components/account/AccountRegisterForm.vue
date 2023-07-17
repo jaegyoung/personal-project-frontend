@@ -31,6 +31,14 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Adress</td>
+                        <td class="input">
+                          <br/>
+                            <input type="text" v-model="roadAddress" placeholder="주소" readonly/>  <v-btn id="postcode" @click="openPostcode">검색</v-btn>
+                            <input type="text" v-model="detailAddress" placeholder="상세주소"/>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Account Type</td>
                         <td class="radio">
                            <label><input type="radio" class="inputValue" v-model="memberType" value="normal">일반</label> 
@@ -55,7 +63,10 @@ export default {
             password: '',
             passwordCheck: '',
             memberType:'',
-            nickname:'',
+            nickname:'', zonecode: '',
+            roadAddress:'',
+            detailAddress:'',
+            totalAddress:null,
 
             checkEmailValid: false,
             checkPasswordValid: false
@@ -65,9 +76,10 @@ export default {
         onSubmit () {
             this.checkEmail()
             this.checkPassword()
+            this.totalAddress=roadAddress+detailAddress
             if(this.checkEmailValid == true && this.checkPasswordValid == true) {
-                const { email, password, memberType ,nickname} = this
-                this.$emit('submit', { email, password, memberType ,nickname})
+                const { email, password, memberType ,nickname, totalAddress} = this
+                this.$emit('submit', { email, password, memberType ,nickname, totalAddress})
             }
         },
         checkEmail() {
@@ -85,7 +97,17 @@ export default {
                 this.checkPasswordValid = false
                 alert('비밀번호를 확인해주세요.')
             }
+        },  openPostcode(){
+            new window.daum.Postcode({
+                oncomplete: (data)=>{
+                    this.zonecode= data.zonecode;
+                    this.roadAddress=data.roadAddress;
+                },
+            }).open()
         },
+        showAddress(){
+            this.totalAddress=this.zonecode+this.roadAddress
+        }
     }
 }
 </script>
@@ -107,7 +129,7 @@ export default {
         padding-left: 70px;
     }
     #signupInfo {
-        height: 110px;
+        height: 200px;
     }
     #signupTable {
         width: 420px;
