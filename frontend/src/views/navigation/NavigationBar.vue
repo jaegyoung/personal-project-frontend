@@ -1,46 +1,24 @@
 <template>
-    <nav>
-    <v-app-bar color="white" style="height: 20px;width: 100%; justify-content: center; align-items: center;" app >
-    <v-toolbar-title>
-  </v-toolbar-title>
-    
-  <v-spacer></v-spacer>
-   <v-toolbar-items>  
-    <p @click="myPage" >{{nickName }}</p>
-      <p class="paragraph" v-if="!isAuthenticated" text @click="signUp">회원가입</p>
-      <p v-if="!isAuthenticated" text @click="signIn">로그인</p>
-      <p v-if="isAuthenticated" text @click="signOut">로그아웃</p> 
+    <nav style="background-color: #69CCDA;">
+    <v-app-bar style="height: 25px;background-color: #69CCDA;" app >
+   <v-toolbar-items style="justify-content: center; color:black;">  
+    <p style="padding-left: 1364px;" @click="myPage" >{{nickName }}</p>
+      <p v-if="!isAuthenticated" text @click="signUp" style="padding-left: 10px; padding-right: 10px;">Sign Up</p>
+      <p v-if="!isAuthenticated" text @click="signIn">Sign In</p>
+      <p v-if="isAuthenticated" text @click="signOut">Sign Out</p> 
+      
    </v-toolbar-items >
  
     </v-app-bar>
-    
-  <v-parallax
-      dark style="height: 150px; max-width: 1000px; justify-content:center;margin-left: auto; margin-right: auto;"
-      src="@/assets/park.svg" @click="goHome"
-    >
-      <v-row align="center" justify="center">
-        <v-col
-          class="text-center"
-          cols="12"
-        >
-          <h1 class="text-h1 font-weight-bold mb-4">
-            WALKING!
-          </h1>
-          <h4 class="subheading">
-            
-          </h4>
-        </v-col>
-      </v-row>
-    </v-parallax> 
-     <v-toolbar class="center-toolbar" style="width: 1000px; height: 35px;" title="menu">
-  <v-toolbar-items class="items" style="margin: 8px; border-radius: 4px;">
-    <span class="items-text">공인 산책로</span>
-    <span class="items-text" @click="goList">내 산책로</span>
-    <span class="items-text">마실</span>
-    <span class="items-text">게시판</span>
-    <span class="items-text" @click="myPage">마이페이지</span>
-  </v-toolbar-items>
-</v-toolbar>
+    <div id="header-wrap" style="height:160px;text-align: center; padding-top: 40px;">
+      <h1 style="color: white;font-size: 40px;">WALKING!</h1><br>
+      <ul id="nav-menu">
+  <router-link class="routerLink" v-for="list in lists" :key="list.key"
+    :to="list.link" exact>
+    {{ list.title }}
+  </router-link>
+</ul>
+    </div>
   </nav> 
   </template>
   
@@ -54,7 +32,13 @@ export default {
             drawer:false,
             isAuthenticated:false,
             nickName:'',
-            userToken:null
+            userToken:null,
+            lists:[
+              {link:'/',title:'Main'},
+              {link:'/',title:'Route'},
+              {link:'/',title:'Review'},
+              {link:'/',title:'MyPage'},
+            ]
         }
     },
     methods: {
@@ -82,9 +66,11 @@ export default {
         router.push('/signup');
       }
     }, 
-    goList(){
-          router.push('/myBoardList')
-        },
+    goList() {
+  if (this.$route.path !== '/myBoardList') {
+    this.$router.push('/myBoardList');
+  }
+},
      
     myPage(){
       router.push('/myPage')
@@ -111,8 +97,14 @@ export default {
   text-align: center;
   display: flex;;
 }
-.paragraph {
-   max-width: 1000px;
-   margin: 0 auto;
-  }
+#nav-menu{
+  list-style: none;
+}
+.routerLink{
+  font-size:25px;
+  padding-right: 60px; 
+  padding-left:  60px;
+  text-decoration: none;
+  color: black;
+}
 </style>
