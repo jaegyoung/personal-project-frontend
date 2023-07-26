@@ -1,13 +1,22 @@
 <template lang="html">
     <v-container class="boardList">
-        <h3 style="text-align: center;">나만의 산책로</h3>
+      
+      <div style="display: flex; "><v-btn @click="goRegister">글쓰기</v-btn>
+        <input type="text" v-model="keyword" style="background-color: white; margin-left: auto;border: 1px solid #ccc;">
+        <v-btn color=primary style="margin-left: 10px;" @click="">검색</v-btn>
+      </div>
+     
+      <br><br>
        
         <v-row v-if="boards && boards.length > 0">
             <v-col v-for="(item, index) in boards" :key="index" cols="3">
-                <v-card class="card-item" @click="goRead(item.id)" style="height: 250px; width: 250px;"> 
-                    <v-img src="https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=47563&fileTy=MEDIA&fileNo=1" height="66%"/>
-                    <v-card-text height="34%">
+                <v-card class="card-item" @click="goRead(item.id)" style="height: 250px; width: 226px;"> 
+                  <v-img :src="dynamicLink(item.imgPath)" height="66%" />
+                    <v-card-text style="font-weight:900; height:20%;font-size: 20px;"  >
                         {{ item.boardTitle }}
+                    </v-card-text>
+                    <v-card-text style="text-align:center;font-weight:500; height:13%;font-size: 17px;"  >
+                       View  {{ item.view }}
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -17,11 +26,12 @@
            
         </div>
         <br>
-        <v-btn @click="goRegister">글쓰기</v-btn>
+      
     </v-container>
 </template>
 <script>
 import router from '@/router';
+const LINK = process.env.VUE_APP_S3_LINK
 const BoardModule = 'BoardModule';
 import { mapActions, mapState } from 'vuex';
 
@@ -31,10 +41,17 @@ export default {
     },
     data() {
         return {
-            prevBoards: [] 
+          link:LINK,
+            prevBoards: [] ,
+            keyword:'',
+          
+    
         }
     },
     methods: {
+      dynamicLink(extraPath) {
+      return `${this.link}/${extraPath}`;
+    },
         ...mapActions(BoardModule, ['requestBoardListToSpring']),
         goRead(id) {
             router.push({
@@ -42,16 +59,20 @@ export default {
                 params: { id }
             });},
         goRegister(){
+          if (localStorage.getItem('userToken')==null) {
+            alert("로그인 후 이용해 주시길 바랍니다.")            
+          } else{
             router.push('/myBoardRegister')
+          }
+            
         },  
-        consoleBoard(){
-            console.log("보드 정보야 :"+this.boards)
-        }
+ 
+        
     },
     async created() {
         await this.requestBoardListToSpring()
   .then((data) => {
-    this.consoleBoard()
+    // this.consoleBoard()
   })
   .catch((error) => {
     throw(error)
@@ -71,6 +92,8 @@ export default {
     transition: box-shadow 0.3s, transform 0.3s;
 }
 .boardList{
-    max-width: 1000px;
+    width: 1200px;
+    
 }
+
 </style>
