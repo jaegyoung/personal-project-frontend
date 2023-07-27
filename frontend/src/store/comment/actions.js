@@ -52,6 +52,15 @@ export default{
       .catch((error) => {
         // 오류 처리 로직 추가
       });
+  },
+  requestRejectReportCommentToSpring({},payload){
+    return axiosInst.delete(`/comment/reported-comment/${payload}`)
+      .then((res)=>{
+        alert('신고가 반려되었습니다.')
+      })
+      .catch((error)=>{
+        
+      })
   }
  
 }
