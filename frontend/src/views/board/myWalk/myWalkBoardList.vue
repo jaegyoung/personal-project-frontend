@@ -12,11 +12,11 @@
             <v-col v-for="(item, index) in boards" :key="index" cols="3">
                 <v-card class="card-item" @click="goRead(item.id)" style="height: 250px; width: 226px;"> 
                   <v-img :src="dynamicLink(item.imgPath)" height="66%" />
-                    <v-card-text style="font-weight:900; height:20%;font-size: 20px;"  >
+                    <v-card-text style="font-weight:900; height:16%;font-size: 20px;"  >
                         {{ item.boardTitle }}
                     </v-card-text>
-                    <v-card-text style="text-align:center;font-weight:500; height:13%;font-size: 17px;"  >
-                       View  {{ item.view }}
+                    <v-card-text style="text-align:center;font-weight:500; height:18%;font-size: 20px;"  >
+                      <span class="mdi mdi-walk"></span>{{ item.view }} <span style="margin-left: 10px;" class="mdi mdi-text-box-check-outline"></span> {{ item.comments }}
                     </v-card-text>
                 </v-card>
             </v-col>
