@@ -1,6 +1,6 @@
 <template lang="">
     <v-container>
-        <v-card id="profileVcard" justify-center>
+        <v-card v-if="checkPassword" id="profileVcard" justify-center>
         <h3>회원 프로필</h3>
         <div>
             <v-card-text>
@@ -40,13 +40,18 @@
                         </td></tr>
                 </table>
                 </form>
-                <div id="proFileSubmitBtn">
-                    <!-- <v-btn type="submit"  width="130px" text-align="center" height="50" color="white" @click="onSubmit" >수정</v-btn>  -->
+                <!-- <div id="proFileSubmitBtn">
+                    <v-btn type="submit"  width="130px" text-align="center" height="50" color="white" @click="onSubmit" >수정</v-btn> 
                     <v-btn @click="memberDelete"  width="130px" text-align="center" height="50" color="white" >탈퇴</v-btn> 
-                </div>
+                </div> -->
             </v-card-text>
         </div>
     </v-card>
+    <v-card style="margin-top: 100px;width:650px; height:250px; justify-content:center" v-if="!checkPassword">
+    <v-card-text style="text-align:center">
+        <h2>비밀번호 검증</h2><br><br><br><br>
+        <input type="password"  placeholder="비밀번호를 입력하세요." v-model="myPassword"><v-btn @click="check">확인</v-btn>
+    </v-card-text></v-card>
     </v-container>
 </template>
 <script>
@@ -67,21 +72,30 @@ export default {
             memberType:'',
             address:'',
             nickname:'',
-            password:''
+            password:'',
+            checkPassword:false,
+            myPassword:'',
+            userToken:''
 
         }
     },
     methods: {
-        ...mapActions(ProfileModule,['requestMyAccountToSpring']),
+        ...mapActions(ProfileModule,['requestMyAccountToSpring','requestcheckPasswordToSpring']),
        async mappingAccount(){
             const payload ={userToken:localStorage.getItem('userToken')}
             
             await this.requestMyAccountToSpring(payload)
             console.log(this.myAccount)
         },
-        memberDelete(){
+       async check(){
+            this.userToken=localStorage.getItem('userToken')
+            const payload = {
+                password:this.myPassword,
+                userToken:this.userToken
+            }
+            this.checkPassword= await this.requestcheckPasswordToSpring(payload)
 
-            
+           
         }
     },
 }
